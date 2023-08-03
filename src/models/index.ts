@@ -1,1 +1,2 @@
-export * from './Person';
+export * from './people';
+export * from './localStorage';
