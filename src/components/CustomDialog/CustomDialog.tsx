@@ -1,6 +1,6 @@
 import { SubjectManager } from '@/models';
 import Dialog from '@mui/material/Dialog';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
 
 interface Props {

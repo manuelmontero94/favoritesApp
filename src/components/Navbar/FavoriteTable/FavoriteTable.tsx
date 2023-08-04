@@ -1,26 +1,21 @@
 import { Person } from '@/models';
-import { addFavorite } from '@/redux/states';
-import store from '@/redux/store';
-import { Checkbox } from '@mui/material';
-import { GridRenderCellParams, DataGrid } from '@mui/x-data-grid';
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { removeFavorite } from '@/redux/states';
+import { AppStore } from '@/redux/store';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
+import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export interface FavoriteTableInterface {}
 
 const FavoriteTable: React.FC<FavoriteTableInterface> = () => {
-	const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
-	const favoritesState = useSelector((state: any) => state.favorites);
 	const pageSize = 5;
 	const dispatch = useDispatch();
+	const favoritesState = useSelector((state: AppStore) => state.favorites);
 
-	const findPerson = (person: Person) => !!selectedPeople.find((p) => p.id === person.id);
-	const filterPerson = (person: Person) => selectedPeople.filter((p) => p.id !== person.id);
-
-	const handleSelectedChange = (person: Person) => {
-		const filtered = findPerson(person) ? filterPerson(person) : [...selectedPeople, person];
-		dispatch(addFavorite(filtered));
-		setSelectedPeople(filtered);
+	const handleClick = (person: Person) => {
+		dispatch(removeFavorite(person));
 	};
 
 	const columns = [
@@ -33,13 +28,9 @@ const FavoriteTable: React.FC<FavoriteTableInterface> = () => {
 			renderCell: (params: GridRenderCellParams) => (
 				<>
 					{
-						<Checkbox
-							size="small"
-							checked={findPerson(params.row)}
-							onChange={() => {
-								handleSelectedChange(params.row);
-							}}
-						/>
+						<IconButton color="secondary" size="small" onClick={() => handleClick(params.row)}>
+							<DeleteIcon />
+						</IconButton>
 					}
 				</>
 			),
